@@ -20,6 +20,7 @@ function setup() {
 function draw(){
 	background(66, 149, 244);
   fill(255);
+  noStroke();
   rect(0,0,windowWidth,200);
 
   right.drawHook();
@@ -82,6 +83,12 @@ class Fish{
     if(this.lCaught==true){
       this.x=left.x;
       this.y=left.y+100;
+    }
+    if(this.rCaught==true&&right.y<=110){
+      text("it's a catch",1000,100);
+    }
+    if(this.lCaught==true&&left.y<=110){
+      text("it's a catch",500,100);
     }
   }
 }
