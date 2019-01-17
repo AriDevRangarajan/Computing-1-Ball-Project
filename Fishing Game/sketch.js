@@ -1,3 +1,21 @@
+/*
+Title: Multiplayer Fishing Game
+Imagined, Designed, and Programmed by: Ari Dev Rangarajan
+Date: January 17, 2019
+Description: This is a game where two players compete to catch fish as fast as possible at the same time.
+Each player must press a random key that will appear out of 4 possibilities once they hook their fish within a certain amount of time
+to catch it and bring it to the surface to get their points. First to 10 wins!
+
+This program does not include external sources of ideas and inspiration
+
+Code from external sources:
+Even listener code from line 350 to the end of the code written to stop the screen from scrolling when the arrow keys are pressed was received from Ryan Collier.
+
+*/
+
+
+
+
 //Declare all variables. Create two arrays, one for the catch keys for player one, and one for the catch keys for player two.
 let fish= [];
 let rightLetters = ["H","J","K","L"];
