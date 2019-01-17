@@ -1,11 +1,9 @@
+//Declare all variables. Create two arrays, one for the catch keys for player one, and one for the catch keys for player two.
 let fish= [];
 let rightLetters = ["H","J","K","L"];
 let leftNumbers = ["1","2","3","4"];
 let right;
 let left;
-let bounceRight;
-let bounceLeft;
-let scored;
 let rightPoints=0;
 let leftPoints=0;
 let gameStart=false
@@ -21,7 +19,7 @@ function setup() {
     right = new Hook(1000,windowHeight/2,false);
     left = new Hook(500,windowHeight/2,false);
 }
-
+//Make three if statements so that the game ends when the time limit or score limit is reached (both are set above)
 function draw(){
 	background(66, 149, 244);
   fill(255);
@@ -36,7 +34,7 @@ function draw(){
   if(leftPoints>=scoreLimit){
     gameEnd=true;
   }
-
+//If the game hasn't started or ended yet, this situation displays the instructions. These are the first things that appear when the game is opened
   if(gameStart==false&&gameEnd==false){
     fill(76, 186, 109);
     rect(150,150,1500,700);
@@ -44,8 +42,8 @@ function draw(){
     fill(0);
     text("Welcome to a multiplayer fishing game!",400,250);
     textSize(30);
-    text("Player 1: Use S,Z,X,C to move and try to catch a fish. When you hook a fish,a random key of 1,2,3,4 will pop up on the screen and it wil be your job to try to press the appropriate key in time. If you press the right key in time, the fish will be hooked and you can bring it to the surface to get your points. Faster fish give you more points.", 200,300,1300,900);
-    text("Player 2: Use the arrow keys to move and try to catch a fish. When you hook a fish,a random key of H,J,K,L will pop up on the screen and it wil be your job to try to press the appropriate key in time. If you press the right key in time, the fish will be hooked and you can bring it to the surface to get your points. Faster fish give you more points.", 200,475,1300,900);
+    text("Player 1: Use S,Z,X,C to move and try to catch a fish. When you hook a fish,a random key of 1,2,3,4 will pop up on the screen and it wil be your job to try to press the appropriate key in time. If you press the right key in time, the fish will be hooked and you can bring it to the surface to get your points.", 200,300,1300,900);
+    text("Player 2: Use the arrow keys to move and try to catch a fish. When you hook a fish,a random key of H,J,K,L will pop up on the screen and it wil be your job to try to press the appropriate key in time. If you press the right key in time, the fish will be hooked and you can bring it to the surface to get your points.", 200,475,1300,900);
     text("The game is until 10 points", 200,650,1300,900);
     fill(255,255,255,0);
     stroke(0)
@@ -54,7 +52,7 @@ function draw(){
     fill(0);
     text("Play", 1410,825);
   }else if(gameEnd==false){
-
+//Draw all of the fish and the hooks, create a new fish if it has been 100 frames, and display all of the points for each player
   right.drawHook();
   right.moveRightHook();
   left.drawHook();
@@ -75,7 +73,8 @@ function draw(){
   text("Player 2 Points: "+rightPoints,1500,100);
   text("Player 1 Points: "+leftPoints,100,100);
   }else{
-
+//If the game has Ended (because the time or score limit if statments above have become true) the computer decides who has won, or whether it is a tie.
+//It then displays this information on the screen.
   if(leftPoints>rightPoints){
     fill(76, 186, 109);
     rect(150,150,1500,700);
@@ -98,7 +97,9 @@ function draw(){
   }
 }
 
-
+//Create a class Fish and give it a location, a speed, and boolean true/false variables that tell if it has been hooked or caught by either hook.
+//This prevents players from stealing fish from each other and allows the fish to be later brought up towards the surface. The variables this.originalSpeed
+//this.random letter, this. randomNumber and this.start timer are all variables that will be explained when they are used later on.
 class Fish{
   constructor(x,y,speed,rHooked,lHooked,rCaught,lCaught){
     this.y=y;
@@ -128,6 +129,13 @@ class Fish{
   moveFish(){
     this.x=this.x+this.speed
   }
+//If the hook fits inside a boundary set by the fish's location, it is now hooked. The if statement also checks to see if there is another fish on that hook, because only one can be on at a time.
+// If this is the first time this loop has run through this fish in this hooking scenario the timer starts, which means that the person only
+// has a certain amount of frames before the fish moves on. This is why originalSpeed is neccesary, so that the fish can move
+//on at the same pace. The reason theat there needed to be an or in the statement that allows it to be true if the fish is hooked is that otherwise, the computer
+//would not allow the fish to be on the hook because it would think that there already is a fish on it. After that, the code makes a random number/letter pop up
+//out of the arrays set at the top and if it is pressed in time, the fish is deemed caught. Otherwise, it moves on. There are two if statements because I had to account for both
+//the right and left hook.
   catchFish(){
     stroke(0);
     if (this.x<=right.x+25&&this.x>=right.x&&this.y<=right.y+125&&this.y>=right.y+75&&right.on==false&&this.startTimer<=frameCount-100||this.rHooked==true){
@@ -179,6 +187,8 @@ class Fish{
       }
     }
   }
+  //Finally, reelFish makes the fish follow the hook towards the surface. Once it reaches the surface, it moves it out of the screen and gives the
+  //corresponding side a point.
   reelFish(){
     if(this.rCaught==true){
       this.x=right.x;
@@ -203,7 +213,7 @@ class Fish{
   }
 }
 
-
+//Create a class hook with a location and a boolean that says whether it has a fish on it or not.
 class Hook {
 
 	constructor(x,y,on){
@@ -223,7 +233,8 @@ class Hook {
     arc(this.x,this.y+75,50,50,-HALF_PI,HALF_PI);
 
   }
-
+//create two ways to move, one with the right hook and the arrow keys, and the other with SZXC. Each movement if statement has built in barriers to prevent
+//the fish from moving out of the screen.
 	moveRightHook(){
     if (keyIsDown(UP_ARROW)) {
       if(this.y<=100){
@@ -290,6 +301,8 @@ class Hook {
   }
 }
 }
+//Create a function that turns letters and numbers from the arrays at the top into key codes that the computer can understand and check to see if
+//they have been pressed or not.
 function letterToKeyCode(letter){
   if (letter=="H"){
     return 72;
@@ -308,14 +321,14 @@ function letterToKeyCode(letter){
   }else if (letter=="4") {
     return 52;
   }
-
   }
+  //create the button for the start screen that starts the game.
 function mouseClicked(){
   if(gameStart==false&&mouseX>=1400&&mouseX<=1480&&mouseY>=790&&mouseY<=840){
     gameStart=true
     }
   }
-
+//a little piece of code that stops the screen from scrolling when the arrow keys are used because they are neccesary for the game.
 window.addEventListener("keydown", function(e) {
 
     if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
