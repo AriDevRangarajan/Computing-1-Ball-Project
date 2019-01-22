@@ -189,7 +189,7 @@ class Fish{
       left.on=true;
       this.speed=0;
       textSize(30);
-      fill(255);
+      fill(0);
       rect(this.x+30,this.y-25,50,50);
       text(this.randomNumber,this.x+55,this.y)
       console.log(letterToKeyCode(this.randomNumber))
